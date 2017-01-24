@@ -15,6 +15,9 @@ namespace Sudoku
         public Form1()
         {
             InitializeComponent();
+            Grid mGrid = new Grid();
+            label1.Text = mGrid.toStringForCmd();
         }
+
     }
 }
