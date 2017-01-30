@@ -43,7 +43,6 @@ namespace Sudoku
                     } while (!written);
                 }
             }
-            int i = 0;
         }
 
         private Boolean xFree(int x, int val)
