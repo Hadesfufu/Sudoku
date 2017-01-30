@@ -11,8 +11,7 @@ namespace Sudoku
         private int val;
         private Boolean[] posVals = new Boolean[9];
 
-        public Cell(int x = 0){
-            val = x;
+        public Cell(){
             resetCell();
         }
 
@@ -50,7 +49,6 @@ namespace Sudoku
             return false;
         }
     }
-
     class Grid
     {
         private Cell[,] grid = new Cell[9, 9];
@@ -62,31 +60,8 @@ namespace Sudoku
 
         private void generateGrid()
         {
-
-            for (int x = 0; x < grid.GetLength(0); x += 1)
-            {
-                for (int y = 0; y < grid.GetLength(1); y += 1)
-                {
-                    grid[x, y] = new Cell();
-                }
-            }
-            Random rnd = new Random();
-            Boolean written;
-            for (int x = 0; x < grid.GetLength(0); x += 1)
-            {
-                for (int y = 0; y < grid.GetLength(1); y += 1)
-                {
-                    int tmp;
-                    written = false;
-                    do
-                    {
-                        tmp = rnd.Next(1, 10);
-                        if (xFree(x, tmp) && yFree(y, tmp) && caseFree(x, y, tmp) && !isBlocking(x,y,tmp))
-                        {
-                            grid[x, y].setValue(tmp);
-                            block(x, y, tmp);
-                            written = true;
-                        }
+            
+        }
                     } while (!written);
                 }
             }
@@ -186,7 +161,7 @@ namespace Sudoku
             {
                 for (int y = 0; y < grid.GetLength(1); y += 1)
                 {
-                    returnValue += grid[x, y];
+                    returnValue += grid[x, y].getValue();
                     if (y == 2 || y == 5)
                     {
                         returnValue += " | ";
