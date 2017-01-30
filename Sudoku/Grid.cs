@@ -11,7 +11,8 @@ namespace Sudoku
         private int val;
         private Boolean[] posVals = new Boolean[9];
 
-        public Cell(){
+        public Cell(int x = 0){
+            val = x;
             resetCell();
         }
 
@@ -49,6 +50,7 @@ namespace Sudoku
             return false;
         }
     }
+
     class Grid
     {
         private Cell[,] grid = new Cell[9, 9];
@@ -60,14 +62,41 @@ namespace Sudoku
 
         private void generateGrid()
         {
-            
+
+            for (int x = 0; x < grid.GetLength(0); x += 1)
+            {
+                for (int y = 0; y < grid.GetLength(1); y += 1)
+                {
+                    grid[x, y] = new Cell();
+                }
+            }
+            Random rnd = new Random();
+            Boolean written;
+            for (int x = 0; x < grid.GetLength(0); x += 1)
+            {
+                for (int y = 0; y < grid.GetLength(1); y += 1)
+                {
+                    int tmp;
+                    written = false;
+                    do
+                    {
+                        tmp = rnd.Next(1, 10);
+                        if (xFree(x, tmp) && yFree(y, tmp) && caseFree(x, y, tmp) && !isBlocking(x,y,tmp))
+                        {
+                            grid[x, y].setValue(tmp);
+                            block(x, y, tmp);
+                            written = true;
+                        }
+                    } while (!written);
+                }
+            }
         }
 
-        private Boolean xFree(int x, Cell val)
+        private Boolean xFree(int x, int val)
         {
             for (int y = 0; y < grid.GetLength(0); y += 1)
             {
-                if (grid[x, y].getValue() == val.getValue())
+                if (grid[x, y].getValue() == val)
                 {
                     return false;
                 }
@@ -75,11 +104,11 @@ namespace Sudoku
             return true;
         }
 
-        private Boolean yFree(int y, Cell val)
+        private Boolean yFree(int y, int val)
         {
             for (int x = 0; x < grid.GetLength(0); x += 1)
             {
-                if (grid[x, y].getValue() == val.getValue())
+                if (grid[x, y].getValue() == val)
                 {
                     return false;
                 }
@@ -87,14 +116,14 @@ namespace Sudoku
             return true;
         }
 
-        private Boolean caseFree(int x, int y, Cell val)
+        private Boolean caseFree(int x, int y, int val)
         {
             int subX = x / 3, subY = y / 3;
             for (int i = subX * 3; i < (subX + 1) * 3; i++)
             {
                 for (int j = subY * 3; j < (subY + 1) * 3; j++)
                 {
-                    if (grid[i, j].getValue() == val.getValue())
+                    if (grid[i, j].getValue() == val)
                     {
                         return false;
                     }
@@ -102,6 +131,54 @@ namespace Sudoku
             }
             return true;
         }
+
+        public bool isBlocking(int x, int y, int val)
+        {
+            for (int i = 0; i < grid.GetLength(0); i += 1)
+            {
+                if (!grid[x, i].isOk(val))
+                    return true;
+            }
+
+            for (int j = 0; j < grid.GetLength(1); j += 1)
+            {
+                if (!grid[j, y].isOk(val))
+                    return true;
+            }
+
+            int subX = x / 3, subY = y / 3;
+            for (int i = subX * 3; i < (subX + 1) * 3; i++)
+            {
+                for (int j = subY * 3; j < (subY + 1) * 3; j++)
+                {
+                    if (!grid[i, j].isOk(val))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public void block(int x, int y, int val)
+        {
+            for (int i = 0; i < grid.GetLength(0); i += 1)
+            {
+                grid[x, i].removeVal(val);
+            }
+
+            for (int j = 0; j < grid.GetLength(1); j += 1)
+            {
+                grid[j, y].removeVal(val);
+            }
+
+            int subX = x / 3, subY = y / 3;
+            for (int i = subX * 3; i < (subX + 1) * 3; i++)
+            {
+                for (int j = subY * 3; j < (subY + 1) * 3; j++)
+                {
+                    grid[i, j].removeVal(val);
+                }
+            }
+        } 
 
         public String toStringForCmd(){
             String returnValue = "";
