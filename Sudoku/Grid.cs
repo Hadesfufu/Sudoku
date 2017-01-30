@@ -6,49 +6,6 @@ using System.Threading.Tasks;
 
 namespace Sudoku
 {
-    class Cell
-    {
-        private int val;
-        private Boolean[] posVals = new Boolean[9];
-
-        public Cell(){
-            resetCell();
-        }
-
-        public int getValue()
-        {
-            return val;
-        }
-
-        public void setValue(int x)
-        {
-            val = x;
-        }
-
-        public void resetCell(){
-            for (int i = 0; i < posVals.GetLength(0); i++)
-            {
-                posVals[i] = true;
-            }
-        }
-
-        public void removeVal(int val)
-        {
-            posVals[val - 1] = false;
-        }
-
-        public Boolean isOk(int val)
-        {
-            for (int i = 0; i < posVals.GetLength(0); i++)
-            {
-                if (i != val - 1 && posVals[i] == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
     class Grid
     {
         private Cell[,] grid = new Cell[9, 9];
@@ -60,7 +17,14 @@ namespace Sudoku
 
         private void generateGrid()
         {
-            
+            Random rnd = new Random();
+            for (int x = 0; x < grid.GetLength(0); x += 1)
+            {
+                for (int y = 0; y < grid.GetLength(1); y += 1)
+                {
+                    grid[x, y] = new Cell(rnd.Next(1, 10));
+                }
+            }
         }
 
         private Boolean xFree(int x, Cell val)
@@ -109,7 +73,7 @@ namespace Sudoku
             {
                 for (int y = 0; y < grid.GetLength(1); y += 1)
                 {
-                    returnValue += grid[x, y];
+                    returnValue += grid[x, y].getValue();
                     if (y == 2 || y == 5)
                     {
                         returnValue += " | ";
