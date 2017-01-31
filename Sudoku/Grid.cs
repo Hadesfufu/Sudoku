@@ -6,49 +6,6 @@ using System.Threading.Tasks;
 
 namespace Sudoku
 {
-    class Cell
-    {
-        private int val;
-        private Boolean[] posVals = new Boolean[9];
-
-        public Cell(){
-            resetCell();
-        }
-
-        public int getValue()
-        {
-            return val;
-        }
-
-        public void setValue(int x)
-        {
-            val = x;
-        }
-
-        public void resetCell(){
-            for (int i = 0; i < posVals.GetLength(0); i++)
-            {
-                posVals[i] = true;
-            }
-        }
-
-        public void removeVal(int val)
-        {
-            posVals[val - 1] = false;
-        }
-
-        public Boolean isOk(int val)
-        {
-            for (int i = 0; i < posVals.GetLength(0); i++)
-            {
-                if (i != val - 1 && posVals[i] == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
     class Grid
     {
         private Cell[,] grid = new Cell[9, 9];
@@ -56,13 +13,74 @@ namespace Sudoku
         public Grid()
         {
             generateGrid();
+            //makestats();
         }
 
-        private void generateGrid()
+        private void makestats()
         {
-            
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // the code that you want to measure comes here
+            watch.Stop();
+            int shots = 300, summ = 0;
+            long elapsedMs = 0;
+            for (int i = 0; i < shots; i++)
+            {
+                shots--;
+                watch.Restart();
+                summ += generateGrid();
+                elapsedMs += watch.ElapsedMilliseconds;
+                System.Threading.Thread.Sleep(100);
+            }
+            Console.WriteLine("Mean :" + summ / shots);
+            Console.WriteLine("Mean :" + elapsedMs / shots);
         }
-                    } while (!written);
+
+        private int generateGrid()
+        {
+             int i = 0;
+             do
+             {
+                 i++;
+                 resetGrid();
+                 generate();
+             } while (!isValid());
+             Console.WriteLine("Generations : " + i);
+             return i;
+        }
+
+        public void generate()
+        {
+            Random rnd = new Random();
+            Boolean written;
+            for (int x = 0; x < grid.GetLength(0); x += 1)
+            {
+                for (int y = 0; y < grid.GetLength(1); y += 1)
+                {
+                    int tmp;
+                    tmp = rnd.Next(1, 10);
+                    int tmpori = tmp;
+                    written = false;
+                    do
+                    {
+                        if (xFree(x, tmp) && yFree(y, tmp) && caseFree(x, y, tmp) && !isBlocking(x, y, tmp))
+                        {
+                            grid[x, y].setValue(tmp);
+                            block(x, y, tmp);
+                            written = true;
+                        }
+                        tmp = (tmp % 9) + 1;
+                    } while (!written && tmp != tmpori);
+                }
+            }
+        }
+
+        private void resetGrid()
+        {
+            for (int x = 0; x < grid.GetLength(0); x += 1)
+            {
+                for (int y = 0; y < grid.GetLength(1); y += 1)
+                {
+                    grid[x, y] = new Cell();
                 }
             }
         }
@@ -111,13 +129,13 @@ namespace Sudoku
         {
             for (int i = 0; i < grid.GetLength(0); i += 1)
             {
-                if (!grid[x, i].isOk(val))
+                if (!grid[x, i].isOk(val) && i != y && grid[x,i].getValue() == 0)
                     return true;
             }
 
             for (int j = 0; j < grid.GetLength(1); j += 1)
             {
-                if (!grid[j, y].isOk(val))
+                if (!grid[j, y].isOk(val) && j != x && grid[j, y].getValue() == 0)
                     return true;
             }
 
@@ -126,7 +144,7 @@ namespace Sudoku
             {
                 for (int j = subY * 3; j < (subY + 1) * 3; j++)
                 {
-                    if (!grid[i, j].isOk(val))
+                    if (!grid[i, j].isOk(val) && i != x && j != y && grid[i, j].getValue() == 0)
                         return true;
                 }
             }
@@ -178,6 +196,19 @@ namespace Sudoku
                 }
             }
             return returnValue;
+        }
+
+        public Boolean isValid()
+        {
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < grid.GetLength(1); j++)
+                {
+                    if (grid[i, j].getValue() == 0)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }
