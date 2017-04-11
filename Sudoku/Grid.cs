@@ -16,6 +16,11 @@ namespace Sudoku
             //makestats();
         }
 
+        public Cell[,] GetGridCells()
+        {
+            return grid;
+        } 
+
         private void makestats()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
