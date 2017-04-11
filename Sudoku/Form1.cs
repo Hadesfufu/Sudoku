@@ -12,12 +12,28 @@ namespace Sudoku
 {
     public partial class Form1 : Form
     {
+        //Label[,] labels = new Label[9,9];
         public Form1()
         {
             InitializeComponent();
             Grid mGrid = new Grid();
-            label1.Text = mGrid.toStringForCmd();
+            Cell[,] table = mGrid.GetGridCells();
+            dataGridView1.ColumnCount = 9;
+            string[] s = new string[9];
+            for (int i = 0; i < 9; i++)
+            {
+                s = new string[9];
+                for (int j = 0; j < 9; j++)
+                {
+                    s[j] = table[i, j].getValue().ToString();
+                }
+                dataGridView1.Rows.Add(s);
+            }
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

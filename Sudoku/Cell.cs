@@ -11,12 +11,7 @@ namespace Sudoku
         private int val;
         private Boolean[] posVals = new Boolean[9];
 
-        public Cell()
-        {
-            resetCell();
-        }
-
-        public Cell(int val)
+        public Cell(int val = 0)
         {
             this.val = val;
             resetCell();
