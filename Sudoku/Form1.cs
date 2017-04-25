@@ -19,6 +19,12 @@ namespace Sudoku
             Grid mGrid = new Grid();
             Cell[,] table = mGrid.GetGridCells();
             dataGridView1.ColumnCount = 9;
+            dataGridView1.RowTemplate.Height = 30;
+            for (int i = 0; i < 9; i++)
+            { // set columns width
+                dataGridView1.Columns[i].Width = 30;
+            }
+
             string[] s = new string[9];
             for (int i = 0; i < 9; i++)
             {

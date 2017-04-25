@@ -47,7 +47,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(500, 500);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "Form1";
+            this.Name = "Sudoku";
             this.Text = "Sudoku - GILLE Thomas, MASSON Yohan";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
