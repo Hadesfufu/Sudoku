@@ -215,5 +215,67 @@ namespace Sudoku
             }
             return true;
         }
+
+        public string[,] generatePartialGrid()
+        {
+            int nbchiffre = 30;
+            string [,] StringGrid = new string[9,9];
+            Random rnd = new Random();
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < grid.GetLength(1); j++)
+                {
+                    if (rnd.Next(1, 82) < nbchiffre)
+                        StringGrid[i, j] = grid[i, j].ToString();
+                }
+            }
+            return StringGrid;
+        }
+
+        public bool isGridValid(string[,] grid)
+        {
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < grid.GetLength(0); j++)
+                {
+                    String currentCase = grid[i,j];
+                    for (int x = 0; x < grid.GetLength(0); x++)
+                    {
+                        if (i == x)
+                            continue;
+                        else
+                        {
+                            if (grid[x, j] == currentCase)
+                                return false;
+                        }
+                    }
+                    for (int y= 0; y < grid.GetLength(1); y++)
+                    {
+                        if (i == y)
+                            continue;
+                        else
+                        {
+                            if (grid[i, y] == currentCase)
+                                return false;
+                        }
+                    }
+                    for (int k = i/3; k < (i/3)+3; k++)
+                    {
+                        for (int h = j/3; h < (j / 3) + 3; h++)
+                        {
+                            if (i == k && j == h)
+                                continue;
+                            else
+                            {
+                                if (grid[k, h] == currentCase)
+                                    return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
     }
 }
