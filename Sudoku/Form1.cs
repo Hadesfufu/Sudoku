@@ -23,6 +23,7 @@ namespace Sudoku
             for (int i = 0; i < 9; i++)
             { // set columns width
                 dataGridView1.Columns[i].Width = 30;
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
             string[] s = new string[9];
@@ -35,11 +36,27 @@ namespace Sudoku
                 }
                 dataGridView1.Rows.Add(s);
             }
+            dataGridView1.Rows[1].Cells[2].Style.BackColor = Color.Red;
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button1.BackColor = Color.Green;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button2.BackColor = Color.Red;
         }
     }
 }
