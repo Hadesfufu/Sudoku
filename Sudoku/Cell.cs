@@ -51,5 +51,9 @@ namespace Sudoku
             }
             return false;
         }
+
+        public override string ToString() {
+            return this.val.ToString();
+        }
     }
 }

@@ -16,27 +16,65 @@ namespace Sudoku
         public Form1()
         {
             InitializeComponent();
+            loadGraphicalGrid();
+            label1.Text = "";
+        }
+
+        private void loadGraphicalGrid()
+        {
+            // Partial grid generation
+            dataGridView1.Rows.Clear();
             Grid mGrid = new Grid();
-            Cell[,] table = mGrid.GetGridCells();
+            String[,] table = mGrid.generatePartialGrid();
+
+            // grid config
             dataGridView1.ColumnCount = 9;
-            dataGridView1.RowTemplate.Height = 30;
+            dataGridView1.RowTemplate.Height = 42;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AllowUserToResizeColumns = false;
             for (int i = 0; i < 9; i++)
-            { // set columns width
-                dataGridView1.Columns[i].Width = 30;
+            {
+                dataGridView1.Columns[i].Width = 42;
                 dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
-            string[] s = new string[9];
+            // set values in DataGridView
+            string[] s;
             for (int i = 0; i < 9; i++)
             {
                 s = new string[9];
                 for (int j = 0; j < 9; j++)
                 {
-                    s[j] = table[i, j].getValue().ToString();
+                    s[j] = table[i, j];
                 }
                 dataGridView1.Rows.Add(s);
+                for (int j = 0; j < 9; j++)
+                {
+                    if (table[i, j] != null)
+                    {
+                        dataGridView1.Rows[i].Cells[j].Style.BackColor = Color.Aqua;
+                    }
+                }
             }
-            dataGridView1.Rows[1].Cells[2].Style.BackColor = Color.Red;
+        }
+
+        private string[,] getDataFromGridView()
+        {
+            string[,] values = new string[9, 9];
+            for (int rows = 0; rows < dataGridView1.Rows.Count; rows++)
+            {
+                for (int col = 0; col < dataGridView1.Rows[rows].Cells.Count; col++)
+                {
+                    if (dataGridView1.Rows[rows].Cells[col].Value != null)
+                    {
+                        values[rows, col] = dataGridView1.Rows[rows].Cells[col].Value.ToString();
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+            return values;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -49,14 +87,37 @@ namespace Sudoku
 
         }
 
+        /*
+         * Reset button
+         */
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.BackColor = Color.Green;
+            this.loadGraphicalGrid();
+            button2.BackColor = default(Color);
+            label1.Text = "";
         }
 
+        /*
+         * Validate button
+         */
         private void button2_Click(object sender, EventArgs e)
         {
-            button2.BackColor = Color.Red;
+            Grid mGrid = new Grid();
+            if (mGrid.isGridValid(getDataFromGridView()))
+            {
+                button2.BackColor = Color.Green;
+                label1.Text = "Félicitation !!";
+            }
+            else
+            {
+                button2.BackColor = Color.Red;
+                label1.Text = "Votre grile n'est pas valide...";
+            }
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
