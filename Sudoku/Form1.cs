@@ -29,12 +29,12 @@ namespace Sudoku
 
             // grid config
             dataGridView1.ColumnCount = 9;
-            dataGridView1.RowTemplate.Height = 42;
+            dataGridView1.RowTemplate.Height = 45;
             dataGridView1.AllowUserToResizeRows = false;
             dataGridView1.AllowUserToResizeColumns = false;
             for (int i = 0; i < 9; i++)
             {
-                dataGridView1.Columns[i].Width = 42;
+                dataGridView1.Columns[i].Width = 45;
                 dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
